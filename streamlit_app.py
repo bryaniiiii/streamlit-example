@@ -35,6 +35,7 @@ def load_image(image_path, image_size=(256, 256), preserve_aspect_ratio=True):
   # Cache image file locally.
   # image_path = tf.keras.utils.get_file(os.path.basename(image_url)[-128:], image_url)
   # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
+  image_path = PIL.Image.open(image_path)
   img = tf.io.decode_image(
       image_path,
       channels=3, dtype=tf.float32)[tf.newaxis, ...]
@@ -65,7 +66,9 @@ else:
     style_img_size = (256, 256)  # Recommended to keep it at 256.
 
     content_image = load_image(contentfile, content_img_size)
+
     style_image = load_image(stylefile, style_img_size)
+
     style_image = tf.nn.avg_pool(style_image, ksize=[3,3], strides=[1,1], padding='SAME')
 
     hub_module = load_model()
