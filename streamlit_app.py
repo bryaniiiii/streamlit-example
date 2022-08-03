@@ -14,6 +14,10 @@ def tensor_to_image(tensor):
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
+
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
+
 @st.cache(allow_output_mutation=True)
 def load_model():
 	model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
@@ -35,8 +39,7 @@ def load_image(image_path, image_size=(256, 256), preserve_aspect_ratio=True):
   # Cache image file locally.
   # image_path = tf.keras.utils.get_file(os.path.basename(image_url)[-128:], image_url)
   # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
-  img = tf.io.decode_image(PIL.Image.open(BytesIO(image_path.getvalue())), channels = 3,
-      dtype=np.float32)[tf.newaxis, ...]
+  img = NormalizeData(np.asarray(PIL.Image.open(BytesIO(image_path.getvalue()))).astype(tf.float32))[tf.newaxis, ..., 3]
   img = crop_center(img)
   img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
   return img
