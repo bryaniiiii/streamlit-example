@@ -35,7 +35,6 @@ def load_image(image_path, image_size=(256, 256), preserve_aspect_ratio=True):
   # Cache image file locally.
   # image_path = tf.keras.utils.get_file(os.path.basename(image_url)[-128:], image_url)
   # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
-  image_path = PIL.Image.open(image_path)
   img = tf.image.convert_image_dtype(
       tf.io.decode_jpeg(image_path,channels=3),
       dtype=tf.float32)[tf.newaxis, ...]
