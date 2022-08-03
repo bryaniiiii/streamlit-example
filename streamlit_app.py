@@ -36,7 +36,7 @@ def load_image(image_path, image_size=(256, 256), preserve_aspect_ratio=True):
   # image_path = tf.keras.utils.get_file(os.path.basename(image_url)[-128:], image_url)
   # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
   img = tf.io.decode_image(PIL.Image.open(BytesIO(image_path.getvalue())), channels = 3,
-      dtype=tf.float32)[tf.newaxis, ...]
+      dtype=np.float32)[tf.newaxis, ...]
   img = crop_center(img)
   img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
   return img
